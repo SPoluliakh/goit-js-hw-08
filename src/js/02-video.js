@@ -3,7 +3,10 @@ import { throttle } from 'lodash';
 
 const iframe = document.querySelector('iframe');
 const player = new Player(iframe);
-const KEY_OF_LOCAL_STORAGE_CURRENT_VELUE = 'videoplayer-current-time';
+const KEY_OF_LOCAL_STORAGE_CURRENT_VELUE = 'videoplayerCurrentTime';
+
+continueTimePlayer();
+
 player.on(
   'timeupdate',
   throttle(e => {
@@ -11,8 +14,14 @@ player.on(
   }, 1000)
 );
 
-player
-  .setCurrentTime(localStorage.getItem(KEY_OF_LOCAL_STORAGE_CURRENT_VELUE))
-  .catch(function (error) {
+function continueTimePlayer() {
+  const getTimePlaying = localStorage.getItem(
+    KEY_OF_LOCAL_STORAGE_CURRENT_VELUE
+  );
+
+  try {
+    player.setCurrentTime(getTimePlaying);
+  } catch (error) {
     console.error(error);
-  });
+  }
+}
