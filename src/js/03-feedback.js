@@ -1,10 +1,13 @@
-import { throttle } from 'lodash';
-const formEl = document.querySelector('.feedback-form');
-const emailEl = document.querySelector('input[type="email"]');
-const textareaEL = document.querySelector('textarea[name="message"]');
+import throttle from 'lodash.throttle';
 
-formEl.addEventListener('input', throttle(onFormInputField, 500));
-formEl.addEventListener('submit', onFormSubmit);
+const refs = {
+  formEl: document.querySelector('.feedback-form'),
+  emailEl: document.querySelector('input[type="email"]'),
+  textareaEL: document.querySelector('textarea[name="message"]'),
+};
+
+refs.formEl.addEventListener('input', throttle(onFormInput, 500));
+refs.formEl.addEventListener('submit', onFormSubmit);
 const formDate = {};
 saveFormDate();
 
@@ -13,11 +16,11 @@ function onFormSubmit(e) {
   const formDateValue = localStorage.getItem('feedbackFormState');
   const savedFormDateValue = JSON.parse(formDateValue);
   console.log(savedFormDateValue);
-  localStorage.removeItem('feedbackFormState');
+  removeItemFromLocalStor();
   e.target.reset();
 }
 
-function onFormInputField(e) {
+function onFormInput(e) {
   formDate[e.target.name] = e.target.value;
 
   localStorage.setItem('feedbackFormState', JSON.stringify(formDate));
@@ -25,11 +28,14 @@ function onFormInputField(e) {
 
 function saveFormDate() {
   const currentDate = localStorage.getItem('feedbackFormState');
+  const formDateValue = localStorage.getItem('feedbackFormState');
+  const savedFormDateValue = JSON.parse(formDateValue);
   if (currentDate) {
-    const formDateValue = localStorage.getItem('feedbackFormState');
-    const savedFormDateValue = JSON.parse(formDateValue);
-
-    emailEl.value = savedFormDateValue.email;
-    textareaEL.value = savedFormDateValue.message;
+    refs.emailEl.value = savedFormDateValue.email;
+    refs.textareaEL.value = savedFormDateValue.message;
   }
+}
+
+function removeItemFromLocalStor() {
+  localStorage.removeItem('feedbackFormState');
 }
