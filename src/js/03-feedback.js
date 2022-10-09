@@ -29,8 +29,18 @@ function saveFormDate() {
   const formDateValue = localStorage.getItem('feedbackFormState');
   const savedFormDateValue = JSON.parse(formDateValue);
   if (formDateValue) {
-    refs.emailEl.value = savedFormDateValue.email;
-    refs.textareaEL.value = savedFormDateValue.message;
+    if (savedFormDateValue.email) {
+      refs.emailEl.value = savedFormDateValue.email;
+    } else {
+      refs.emailEl.value = '';
+    }
+
+    if (savedFormDateValue.message) {
+      refs.textareaEL.value = savedFormDateValue.message;
+    } else {
+      refs.textareaEL.value = '';
+    }
+
     formDate.email = savedFormDateValue.email;
     formDate.message = savedFormDateValue.message;
   }
